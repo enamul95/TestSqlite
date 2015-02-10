@@ -81,7 +81,7 @@ angular.module('starter', ['ionic', 'ngCordova'])
 		
  
 
- $scope.select1 = function() {
+ $scope.select = function() {
 	 
         var query = "SELECT * FROM branch_info";
 		 $scope.results = []; 
