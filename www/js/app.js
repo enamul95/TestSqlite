@@ -60,7 +60,11 @@ angular.module('starter', ['ionic', 'ngCordova'])
 								alert(latLngNodes.branchCode+db);								
 							var query = "INSERT INTO branch_info (branch_code, branch_name,branch_address,branch_phone,branch_fax) VALUES (?,?,?,?,?)";
 							$cordovaSQLite.execute(db, query, [latLngNodes.branchCode, latLngNodes.branchName,latLngNodes.bracnAddress,latLngNodes.branchPhone,latLngNodes.branchFax]).then(function(res) {
+<<<<<<< HEAD
 							//alert("Insert successfully !");
+=======
+							alert("Insert successfully !");
+>>>>>>> 917a016cedaabab1afbf0430806a37a7d9fa037e
 							//console.log("INSERT ID -> " + res.insertId);
 						}, function (err) {
 						 alert("Failure");
@@ -81,6 +85,7 @@ angular.module('starter', ['ionic', 'ngCordova'])
 		
  
 
+<<<<<<< HEAD
  $scope.select1 = function() {
 	 	//alert("select"+db);
         var query = "SELECT * FROM branch_info";
@@ -104,6 +109,18 @@ angular.module('starter', ['ionic', 'ngCordova'])
 				  "branch_phone" : res.rows.item(i).branch_phone,
 				   "branch_fax" : res.rows.item(i).branch_fax,
 			 });
+=======
+ $scope.select = function() {
+	 
+        var query = "SELECT * FROM branch_info";
+		 $scope.results = []; 
+        $cordovaSQLite.execute(db, query).then(function(res) {
+            if(res.rows.length > 0) {			
+				for(var i=0; i<res.rows.length; i++){
+					
+				//$scope.branch_code_values=	res.rows.item(i).branch_code;				
+				 $scope.results.push(res.rows.items(i));
+>>>>>>> 917a016cedaabab1afbf0430806a37a7d9fa037e
 				} 
 				
             } else {
@@ -117,10 +134,13 @@ angular.module('starter', ['ionic', 'ngCordova'])
     }
 	
 	
+<<<<<<< HEAD
  $scope.ItemValue = function(output) {
 		alert("Dhaka");
 		alert("out value"+output.branch_code);
  }
+=======
+>>>>>>> 917a016cedaabab1afbf0430806a37a7d9fa037e
 
 	
 	 $timeout(function() {
