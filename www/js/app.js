@@ -29,35 +29,105 @@ angular.module('starter', ['ionic', 'ngCordova'])
     $urlRouterProvider.otherwise("/signin");
 })
 
-.controller('SignInCtrl', function($scope, $state, $http,$cordovaSQLite,$location) {
+.controller('SignInCtrl', function($scope, $state, $http, $rootScope,$ionicLoading,$filter,$ionicPopup, $timeout,$cordovaSQLite) {
 
-  $scope.insert = function() {
-  alert("Call Method");
-        var query = "INSERT INTO people (firstname, lastname) VALUES (?,?)";
-        $cordovaSQLite.execute(db, query, ['Enamul', 'Haque']).then(function(res) {
-		 alert("Insert Method");
-            console.log("INSERT ID -> " + res.insertId);
-        }, function (err) {
-		 alert("Failure");
-            console.error(err);
-        });
-    }
+
+	
+
+		
+
+
+
+
+ $scope.Sync = function() {
+		$ionicLoading.show({
+                template: 'Please Wait..'
+            });
+			$http({
+				  method: 'GET',
+				 
+				  url: 'http://202.40.190.14:8084/OracleDatabaseLatLng/LatLngSV',
+				  //params: {mailID:mailID,sessiongID:sessionID,companyCode:'001',accountNo:$scope.sourceAccount},
+				  //type:'JSON',				  
+				  headers : { 'Content-Type': 'application/json' }
+				}).success(function(data, status, headers, config) {
+					//alert(data.accountDetailsSelectedByAccountNodes[0].accountTitle);   
+						//$scope.accountDetailsSelectedByAccountNodes = data.accountDetailsSelectedByAccountNodes; // response data
+						$rootScope.latLngNodes = data.latLngNodes; // response data
+						$rootScope.responseArr = [];
+						angular.forEach(data.latLngNodes, function(latLngNodes, index) {
+							 $ionicLoading.hide();
+								alert(latLngNodes.branchCode+db);								
+							var query = "INSERT INTO branch_info (branch_code, branch_name,branch_address,branch_phone,branch_fax) VALUES (?,?,?,?,?)";
+							$cordovaSQLite.execute(db, query, [latLngNodes.branchCode, latLngNodes.branchName,latLngNodes.bracnAddress,latLngNodes.branchPhone,latLngNodes.branchFax]).then(function(res) {
+							//alert("Insert successfully !");
+							//console.log("INSERT ID -> " + res.insertId);
+						}, function (err) {
+						 alert("Failure");
+							
+						});	
+												
+					});   
+						
+					//alert($rootScope.responseArr.toString);
+				}).error(function(data, status, headers, config) {
+					 $ionicLoading.hide();
+					$ionicPopup.alert({
+						title:'Unable to perform your request. Please Check your Device Internet Connection',
+										  //template:'From date'
+					})
+			});            
+		}
+		
  
-    $scope.select = function() {
-	 alert("Call Method");
-        var query = "SELECT firstname, lastname FROM people ";
+
+ $scope.select1 = function() {
+	 	//alert("select"+db);
+        var query = "SELECT * FROM branch_info";
+		 $scope.results = []; 
+		   var output_results = [];
+		   $scope.outputs = [];
         $cordovaSQLite.execute(db, query).then(function(res) {
-            if(res.rows.length > 0) {
-			 alert("Select Method");
-                console.log("SELECTED -> " + res.rows.item(0).firstname + " " + res.rows.item(0).lastname);
+            if(res.rows.length > 0) {	
+			//alert("len");			
+				for(var i=0; i<res.rows.length; i++){
+					
+				//$scope.branch_code_values=	res.rows.item(i).branch_code;
+				//alert(branch_code_values);
+				//alert("selet"+res.rows.item(i).branch_name);
+				 //$scope.results.push(res.rows.items(i));
+				  //output_results.push(res.rows.item(i));
+				$scope.outputs.push({
+			   "branch_code" : res.rows.item(i).branch_code,
+			    "branch_name" : res.rows.item(i).branch_name,
+				 "branch_address" : res.rows.item(i).branch_address,
+				  "branch_phone" : res.rows.item(i).branch_phone,
+				   "branch_fax" : res.rows.item(i).branch_fax,
+			 });
+				} 
+				
             } else {
-                console.log("No results found");
+             
+				alert("No results found");
             }
         }, function (err) {
-            console.error(err);
+           // console.error(err);
 			 alert("Error Method");
         });
     }
+	
+	
+ $scope.ItemValue = function(output) {
+		alert("Dhaka");
+		alert("out value"+output.branch_code);
+ }
+
+	
+	 $timeout(function() {
+     $ionicLoading.hide();
+   }, 2000);
+
+  
 })
 .controller('welcomeCtrl', function($scope, $state, $http,$ionicLoading) {
 
@@ -72,6 +142,6 @@ angular.module('starter', ['ionic', 'ngCordova'])
                 StatusBar.styleDefault();
             }
             db = $cordovaSQLite.openDB({ name: "my.db" });
-            $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS people (id integer primary key, firstname text, lastname text)");
+            $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS branch_info (branch_code text, branch_name text,branch_address text, branch_phone text,branch_fax text)");
         });
     });

@@ -23,32 +23,40 @@
       <script id="signin.html" type="text/ng-template">
       <ion-view title="<span class='appTitle'>MobiBank</span>" left-buttons="leftButtons" right-buttons="rightButtons">
 	  
-	    <ion-nav-bar class="bar-positive nav-title-slide-ios7">
-		  <ion-nav-buttons></ion-nav-buttons>
-	      <ion-nav-back-button></ion-nav-back-button>
-        </ion-nav-bar>       
+	   <ion-nav-bar class="bar-positive nav-title-slide-ios7">
+            <ion-nav-buttons side="right" >
+                <a title="Sync" class="button button-outline icon-right ion-log-out "  ng-click="Sync()" >                    
+                </a>
+           </ion-nav-back-button>
+         </ion-nav-bar>     
             
         <ion-content has-header="true">
-         
 		
-			
-		 	
-			 			
-				<label class="item item-input">
-				<button class="button button-positive" ng-click="insert()" >
-			 Insert
-			</button>
-		 </label>
-		 
-		 			
-				<label class="item item-input">
-				<button class="button button-positive" ng-click="select()" >
-			 Select
-			</button>
-		 </label>
-		 
-		 	
-          		  		  
+		<button class="button button-block button-positive"  ng-click="select1()">
+              Select
+            </button>
+         
+		<!--<div class="list">
+	
+			<ul>
+                <li ng-repeat="output in outputs">
+                    <span class="bold">{{output.branch_code}}</span>
+                </li>
+            </ul>
+			</div>-->
+				
+			<div class="list">
+
+		  <a class="item" ng-repeat="output in outputs" href="#" ng-click="ItemValue(output)">
+		   <h2>{{output.branch_code}}</h2>
+			 <h2>{{output.branch_name}}</h2>
+			 <h2>{{output.branch_address}}</h2>
+			 <h2>{{output.branch_phone}}</h2>
+			 <h2>{{output.branch_fax}}</h2>
+		  </a>
+		  </div>
+		
+	
         </ion-content>
 		<div class="bar bar-footer">
 		  <div class="title"><h6>(c) ERA InfoTech Limited. All right reserved</h6></div>
